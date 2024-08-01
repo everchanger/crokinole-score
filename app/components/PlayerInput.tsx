@@ -1,14 +1,15 @@
-export type Player = {
-  name: string;
-  color: string;
-};
+import type { Player } from '@/app/types';
 
 export default function PlayerInput({
   player,
   onChange,
+  onDelete,
+  isAllowedToDelete,
 }: {
   player: Player;
   onChange: (player: Player) => void;
+  onDelete: () => void;
+  isAllowedToDelete: boolean;
 }) {
   return (
     <div
@@ -28,6 +29,17 @@ export default function PlayerInput({
           onChange({ color: player.color, name: e.target.value })
         }
       />
+      <button
+        onClick={onDelete}
+        className={
+          'flex aspect-square h-8 w-8 items-center justify-center ' +
+          (isAllowedToDelete
+            ? 'rounded-full bg-red-500 p-2 text-white hover:bg-red-600'
+            : 'cursor-not-allowed rounded-full bg-gray-300 p-2 text-gray-500')
+        }
+      >
+        x
+      </button>
     </div>
   );
 }

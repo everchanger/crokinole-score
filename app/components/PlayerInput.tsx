@@ -19,14 +19,24 @@ export default function PlayerInput({
       <input
         type='color'
         value={player.color}
-        onChange={(e) => onChange({ color: e.target.value, name: player.name })}
+        onChange={(e) =>
+          onChange({
+            color: e.target.value,
+            name: player.name,
+            scores: player.scores,
+          })
+        }
         className='aspect-square bg-transparent'
       />
       <input
         className='input input-bordered w-full max-w-xs'
         value={player.name}
         onChange={(e) =>
-          onChange({ color: player.color, name: e.target.value })
+          onChange({
+            color: player.color,
+            name: e.target.value,
+            scores: player.scores,
+          })
         }
       />
       <button

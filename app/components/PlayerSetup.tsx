@@ -61,10 +61,16 @@ export default function PlayerSetyp({
           isAllowedToDelete={canDelete}
         />
       ))}
-      <div className='glass flex justify-center space-x-3 p-4'>
+      <div className='glass flex justify-center space-x-3 p-4 shadow-md'>
         <button
           className='btn btn-outline btn-primary'
-          onClick={() => onAddPlayer({ name: '', color: getRandomColor() })}
+          onClick={() =>
+            onAddPlayer({
+              name: '',
+              color: getRandomColor(),
+              scores: [[0, 0, 0, 0]],
+            })
+          }
         >
           Add player
         </button>

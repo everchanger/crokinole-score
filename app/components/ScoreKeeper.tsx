@@ -38,7 +38,45 @@ export default function ScoreKeeper() {
           onChangeScoreMode={(mode) => setScoreMode(mode)}
         />
       )}
-      {appState === 'scoring' && <div>SCORING!</div>}
+      {appState === 'scoring' && (
+        <div>
+          {players.map((player) => (
+            <div
+              className='mb-4 rounded-tl-lg border-l-4 border-t-2 bg-zinc-50 p-4 pt-2 shadow-md'
+              style={{ borderColor: player.color }}
+              key={player.color + player.name}
+            >
+              <h2 className='mb-2'>{player.name}</h2>
+              <div className='space-x-8'>
+                <button
+                  style={{ borderColor: player.color }}
+                  className='aspect-square w-12 rounded-full border-2 p-2 font-semibold text-black shadow-md hover:bg-white hover:shadow-lg'
+                >
+                  5
+                </button>
+                <button
+                  style={{ borderColor: player.color }}
+                  className='aspect-square w-12 rounded-full border-2 p-2 font-semibold text-black shadow-md hover:bg-white hover:shadow-lg'
+                >
+                  10
+                </button>
+                <button
+                  style={{ borderColor: player.color }}
+                  className='aspect-square w-12 rounded-full border-2 p-2 font-semibold text-black shadow-md hover:bg-white hover:shadow-lg'
+                >
+                  15
+                </button>
+                <button
+                  style={{ borderColor: player.color }}
+                  className='aspect-square w-12 rounded-full border-2 p-2 font-semibold text-black shadow-md hover:bg-white hover:shadow-lg'
+                >
+                  20
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

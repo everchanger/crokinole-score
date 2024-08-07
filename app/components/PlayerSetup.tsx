@@ -27,27 +27,27 @@ export default function PlayerSetyp({
 
   return (
     <div className='space-y-4'>
-      <div className='space-x-4 p-4 shadow-md'>
+      <div className='glass space-x-4 p-4 shadow-md'>
         <p className='mb-2 font-semibold'>Scoring</p>
-        <label>
+        <label className='label'>
+          <span className='label-text'>Traditional</span>
           <input
             type='radio'
             value='traditional'
-            className='mr-1'
+            className='radio-primary radio'
             checked={scoreMode === 'traditional'}
             onChange={() => onChangeScoreMode('traditional')}
           />
-          Traditional
         </label>
-        <label>
+        <label className='label'>
+          <span className='label-text'>Additive</span>
           <input
             type='radio'
             value='additive'
-            className='mr-1'
+            className='radio-primary radio'
             checked={scoreMode === 'additive'}
             onChange={() => onChangeScoreMode('additive')}
           />
-          Additive
         </label>
       </div>
       {players.map((player, index) => (
@@ -61,17 +61,14 @@ export default function PlayerSetyp({
           isAllowedToDelete={canDelete}
         />
       ))}
-      <div className='flex justify-center space-x-3'>
+      <div className='glass flex justify-center space-x-3 p-4'>
         <button
-          className='rounded-full border-2 border-blue-500 px-4 py-2 font-semibold uppercase text-blue-500 text-white shadow-md hover:border-blue-600 hover:text-blue-600 hover:shadow-sm'
+          className='btn btn-outline btn-primary'
           onClick={() => onAddPlayer({ name: '', color: getRandomColor() })}
         >
           Add player
         </button>
-        <button
-          className='rounded-full bg-blue-500 px-4 py-2 font-semibold uppercase text-white shadow-md hover:bg-blue-600 hover:shadow-sm'
-          onClick={() => onStartGame()}
-        >
+        <button className='btn btn-primary' onClick={() => onStartGame()}>
           Start game!
         </button>
       </div>

@@ -7,3 +7,25 @@
     text-wrap: balance;
   }
 }
+
+
+
+body {
+  --s: 200px; /* control the size*/
+
+  @screen md {
+    --s: 400px;
+  }
+
+  --_g: 
+      oklch(var(--b2) / 1) 0%  7% ,oklch(var(--b1) / 1) 8% 35%, oklch(var(--b2) / 1) 36% 65%,
+      oklch(var(--b1) / 1) 66% 87%, oklch(var(--b2) / 1) 88% 95%,
+     #0000 96%;
+  
+  background:
+    radial-gradient(50% 50% at 100% 0,var(--_g)),
+    radial-gradient(50% 50% at 0 100%,var(--_g)),
+    radial-gradient(50% 50%,var(--_g)),
+    radial-gradient(50% 50%,var(--_g)) calc(var(--s)/2) calc(var(--s)/2) oklch(var(--b2) / 1);
+  background-size: var(--s) var(--s);
+}

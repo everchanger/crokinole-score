@@ -13,7 +13,7 @@ export default function PlayerInput({
 }) {
   return (
     <div
-      className='flex items-center space-x-2 rounded-xl rounded-t-none border-t-4 p-4 shadow-md'
+      className='glass flex items-center space-x-2 rounded-xl rounded-t-none border-0 border-t-4 border-solid p-4 shadow-md'
       style={{ borderColor: player.color }}
     >
       <input
@@ -23,7 +23,7 @@ export default function PlayerInput({
         className='aspect-square bg-transparent'
       />
       <input
-        className='rounded border border-solid border-gray-400 px-2 py-1'
+        className='input input-bordered w-full max-w-xs'
         value={player.name}
         onChange={(e) =>
           onChange({ color: player.color, name: e.target.value })
@@ -31,14 +31,24 @@ export default function PlayerInput({
       />
       <button
         onClick={onDelete}
-        className={
-          'flex aspect-square h-8 w-8 items-center justify-center ' +
-          (isAllowedToDelete
-            ? 'rounded-full bg-red-500 p-2 text-white hover:bg-red-600'
-            : 'cursor-not-allowed rounded-full bg-gray-300 p-2 text-gray-500')
-        }
+        className='btn btn-circle btn-outline btn-error btn-sm'
+        disabled={!isAllowedToDelete}
+        title='Delete player'
       >
-        x
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className='h-4 w-4'
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth='2'
+            d='M6 18L18 6M6 6l12 12'
+          />
+        </svg>
       </button>
     </div>
   );

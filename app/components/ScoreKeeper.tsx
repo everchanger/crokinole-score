@@ -1,23 +1,30 @@
 'use client';
 
-import { useState } from 'react';
-import type { Player, ScoreMode } from '@/app/types';
-import PlayerSetup from './PlayerSetup';
+import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
+
+import type { Player } from '@/app/types';
+import { GameContext, type GameContextType } from '../GameContext';
+import GameSetup from './GameSetup';
 import Counter from './Counter';
 
-type AppState = 'setup' | 'scoring';
-
-const colors = ['#004e89', '#fe4a49', '#c8e087', '#fed766', '#2ab7ca'];
 const scoring = [5, 10, 15, 20];
 
 export default function ScoreKeeper() {
-  const [appState, setAppState] = useState<AppState>('setup');
-  const [scoreMode, setScoreMode] = useState<ScoreMode>('traditional');
-  const [players, setPlayers] = useState<Player[]>([
-    { name: 'Player 1', color: colors[0], scores: [[0, 0, 0, 0]] },
-    { name: 'Player 2', color: colors[1], scores: [[0, 0, 0, 0]] },
-  ]);
-  const [activeRound, setActiveRound] = useState(1);
+  const router = useRouter();
+  const {
+    colors,
+    appState,
+    setAppState,
+    activeRound,
+    setActiveRound,
+    scoreMode,
+    setScoreMode,
+    targetScore,
+    setTargetScore,
+    players,
+    setPlayers,
+  } = useContext(GameContext) as GameContextType;
 
   const updatePlayer = (index: number, player: Player) => {
     const newPlayers = [...players];
@@ -49,8 +56,13 @@ export default function ScoreKeeper() {
           score: 0,
         };
       } else {
-        const scoreIndex = scores.indexOf(Math.max(...scores));
-        return { player: players[scoreIndex], score: scores[scoreIndex] };
+        const winnerIndex = scores[0] > scores[1] ? 0 : 1;
+        const loserIndex = Math.abs(winnerIndex - 1);
+
+        return {
+          player: players[winnerIndex],
+          score: scores[winnerIndex] - scores[loserIndex],
+        };
       }
     } else {
       return { score: 0 };
@@ -62,10 +74,12 @@ export default function ScoreKeeper() {
   return (
     <div className=''>
       {appState === 'setup' && (
-        <PlayerSetup
+        <GameSetup
+          points={targetScore}
           players={players}
           scoreMode={scoreMode}
           colors={colors}
+          onPointsChange={(points) => setTargetScore(points)}
           onAddPlayer={(player) => setPlayers([...players, player])}
           onRemovePlayer={(index) =>
             setPlayers(players.filter((_, i) => i !== index))
@@ -74,6 +88,7 @@ export default function ScoreKeeper() {
           onStartGame={() => {
             setPlayers(players.filter((player) => player.name !== ''));
             setAppState('scoring');
+            router.push('/round/1');
           }}
           onChangeScoreMode={(mode) => setScoreMode(mode)}
         />
@@ -81,7 +96,7 @@ export default function ScoreKeeper() {
       {appState === 'scoring' && (
         <div className='glass p-2 shadow-md'>
           <h2>Round {activeRound}</h2>
-          <table className='table mb-8'>
+          <table className='table'>
             <thead>
               <tr>
                 <th>Player</th>
@@ -110,13 +125,9 @@ export default function ScoreKeeper() {
               ))}
             </tbody>
           </table>
-          <p>
-            Round winner:{' '}
-            {winner.score && winner.player
-              ? winner.player.name + ' score: ' + winner.score
-              : 'Tie'}
-          </p>
-          <button className='btn btn-primary'>Round complete!</button>
+          <div className='mb-2 mt-6 flex justify-center'>
+            <button className='btn btn-primary'>Round complete!</button>
+          </div>
         </div>
       )}
     </div>

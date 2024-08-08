@@ -8,7 +8,7 @@ export default function Counter({
   min?: number;
 }) {
   return (
-    <div className='flex flex-col' items-center>
+    <div className='flex flex-col items-center'>
       <button className='btn btn-xs' onClick={() => onChange(count + 1)}>
         <svg
           xmlns='http://www.w3.org/2000/svg'

@@ -1,19 +1,23 @@
 import type { Player, ScoreMode } from '@/app/types';
 import PlayerInput from './PlayerInput';
 
-export default function PlayerSetyp({
+export default function GameSetup({
+  points,
   players,
   colors,
   scoreMode,
+  onPointsChange,
   onAddPlayer,
   onRemovePlayer,
   onUpdatePlayer,
   onChangeScoreMode,
   onStartGame,
 }: {
+  points: number;
   players: Player[];
   colors: string[];
   scoreMode: ScoreMode;
+  onPointsChange: (points: number) => void;
   onAddPlayer: (player: Player) => void;
   onRemovePlayer: (index: number) => void;
   onUpdatePlayer(index: number, player: Player): void;
@@ -40,6 +44,16 @@ export default function PlayerSetyp({
           />
         </label>
         <label className='label'>
+          <span className='label-text'>Tournament</span>
+          <input
+            type='radio'
+            value='tournament'
+            className='radio-primary radio'
+            checked={scoreMode === 'tournament'}
+            onChange={() => onChangeScoreMode('tournament')}
+          />
+        </label>
+        <label className='label mb-4'>
           <span className='label-text'>Additive</span>
           <input
             type='radio'
@@ -47,6 +61,19 @@ export default function PlayerSetyp({
             className='radio-primary radio'
             checked={scoreMode === 'additive'}
             onChange={() => onChangeScoreMode('additive')}
+          />
+        </label>
+        <label className='form-control'>
+          <div className='label'>
+            <span className='label-text'>
+              How many points should the game have?
+            </span>
+          </div>
+          <input
+            type='number'
+            className='input input-bordered w-20'
+            value={points}
+            onChange={(e) => onPointsChange(parseInt(e.target.value))}
           />
         </label>
       </div>

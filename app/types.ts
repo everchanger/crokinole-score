@@ -4,4 +4,4 @@ export type Player = {
   scores: number[][];
 };
 
-export type ScoreMode = 'traditional' | 'additive';
+export type ScoreMode = 'traditional' | 'additive' | 'tournament';

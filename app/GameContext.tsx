@@ -10,6 +10,7 @@ export type GameContextType = {
   targetScore: number;
   players: Player[];
   colors: string[];
+  scoring: number[];
   setAppState: (state: AppState) => void;
   setActiveRound: (round: number) => void;
   setScoreMode: (mode: ScoreMode) => void;
@@ -22,6 +23,7 @@ export const GameContext = createContext<GameContextType | null>(null);
 type AppState = 'setup' | 'scoring';
 
 const colors = ['#004e89', '#fe4a49', '#c8e087', '#fed766', '#2ab7ca'];
+const scoring = [5, 10, 15, 20];
 
 export function GameContextProvider({
   children,
@@ -36,6 +38,7 @@ export function GameContextProvider({
     { name: 'Player 1', color: colors[0], scores: [[0, 0, 0, 0]] },
     { name: 'Player 2', color: colors[1], scores: [[0, 0, 0, 0]] },
   ]);
+  const [scores, setScores] = useState<number[][]>([[0, 0, 0, 0]]);
 
   return (
     <GameContext.Provider
@@ -46,6 +49,7 @@ export function GameContextProvider({
         targetScore,
         players,
         colors,
+        scoring,
         setAppState,
         setActiveRound,
         setScoreMode,

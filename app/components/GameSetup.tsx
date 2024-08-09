@@ -1,33 +1,33 @@
-import type { Player, ScoreMode } from '@/app/types';
-import PlayerInput from './PlayerInput';
+'use client';
 
-export default function GameSetup({
-  points,
-  players,
-  colors,
-  scoreMode,
-  onPointsChange,
-  onAddPlayer,
-  onRemovePlayer,
-  onUpdatePlayer,
-  onChangeScoreMode,
-  onStartGame,
-}: {
-  points: number;
-  players: Player[];
-  colors: string[];
-  scoreMode: ScoreMode;
-  onPointsChange: (points: number) => void;
-  onAddPlayer: (player: Player) => void;
-  onRemovePlayer: (index: number) => void;
-  onUpdatePlayer(index: number, player: Player): void;
-  onChangeScoreMode: (mode: ScoreMode) => void;
-  onStartGame: () => void;
-}) {
+import Link from 'next/link';
+import { useContext } from 'react';
+
+import type { Player } from '@/app/types';
+import PlayerInput from '@/app/components/PlayerInput';
+import { GameContext, type GameContextType } from '@/app/GameContext';
+
+export default function GameSetup({}: {}) {
+  const {
+    colors,
+    scoreMode,
+    setScoreMode,
+    targetScore,
+    setTargetScore,
+    players,
+    setPlayers,
+  } = useContext(GameContext) as GameContextType;
+
   const canDelete = players.length > 2;
 
   const getRandomColor = () =>
     colors[Math.floor(Math.random() * colors.length)];
+
+  const updatePlayer = (index: number, player: Player) => {
+    const newPlayers = [...players];
+    newPlayers[index] = player;
+    setPlayers(newPlayers);
+  };
 
   return (
     <div className='space-y-4'>
@@ -40,7 +40,7 @@ export default function GameSetup({
             value='traditional'
             className='radio-primary radio'
             checked={scoreMode === 'traditional'}
-            onChange={() => onChangeScoreMode('traditional')}
+            onChange={() => setScoreMode('traditional')}
           />
         </label>
         <label className='label'>
@@ -50,7 +50,7 @@ export default function GameSetup({
             value='tournament'
             className='radio-primary radio'
             checked={scoreMode === 'tournament'}
-            onChange={() => onChangeScoreMode('tournament')}
+            onChange={() => setScoreMode('tournament')}
           />
         </label>
         <label className='label mb-4'>
@@ -60,7 +60,7 @@ export default function GameSetup({
             value='additive'
             className='radio-primary radio'
             checked={scoreMode === 'additive'}
-            onChange={() => onChangeScoreMode('additive')}
+            onChange={() => setScoreMode('additive')}
           />
         </label>
         <label className='form-control'>
@@ -72,8 +72,8 @@ export default function GameSetup({
           <input
             type='number'
             className='input input-bordered w-20'
-            value={points}
-            onChange={(e) => onPointsChange(parseInt(e.target.value))}
+            value={targetScore}
+            onChange={(e) => setTargetScore(parseInt(e.target.value))}
           />
         </label>
       </div>
@@ -81,9 +81,9 @@ export default function GameSetup({
         <PlayerInput
           key={index}
           player={player}
-          onChange={(player) => onUpdatePlayer(index, player)}
+          onChange={(player) => updatePlayer(index, player)}
           onDelete={() => {
-            if (canDelete) onRemovePlayer(index);
+            if (canDelete) setPlayers(players.filter((_, i) => i !== index));
           }}
           isAllowedToDelete={canDelete}
         />
@@ -92,18 +92,21 @@ export default function GameSetup({
         <button
           className='btn btn-outline btn-primary'
           onClick={() =>
-            onAddPlayer({
-              name: '',
-              color: getRandomColor(),
-              scores: [[0, 0, 0, 0]],
-            })
+            setPlayers([
+              ...players,
+              {
+                name: '',
+                color: getRandomColor(),
+                scores: [[0, 0, 0, 0]],
+              },
+            ])
           }
         >
           Add player
         </button>
-        <button className='btn btn-primary' onClick={() => onStartGame()}>
+        <Link className='btn btn-primary' href='/round/1'>
           Start game!
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -9,7 +9,10 @@ export default function Counter({
 }) {
   return (
     <div className='flex flex-col items-center'>
-      <button className='btn btn-xs' onClick={() => onChange(count + 1)}>
+      <button
+        className='btn btn-primary btn-xs'
+        onClick={() => onChange(count + 1)}
+      >
         <svg
           xmlns='http://www.w3.org/2000/svg'
           className='h-2 w-2'
@@ -27,7 +30,7 @@ export default function Counter({
       </button>
       <span className='text-center'>{count}</span>
       <button
-        className='btn btn-xs'
+        className='btn btn-primary btn-xs'
         disabled={count <= min}
         onClick={() => onChange(count - 1)}
       >

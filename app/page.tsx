@@ -1,5 +1,5 @@
-import ScoreKeeper from './components/ScoreKeeper';
+import GameSetup from '@/app/components/GameSetup';
 
 export default function Home() {
-  return <ScoreKeeper />;
+  return <GameSetup />;
 }

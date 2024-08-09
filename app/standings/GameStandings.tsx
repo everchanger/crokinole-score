@@ -11,7 +11,7 @@ export default function GameStandings() {
     GameContext
   ) as GameContextType;
 
-  const roundWinner = (round: number): { score: number; player?: Player } => {
+  const roundWinner = (round: number): { score: number; index?: number } => {
     const scores = players.map((player) => {
       return player.scores[round - 1].reduce(
         (acc, score, index) => acc + score * scoring[index],
@@ -29,7 +29,7 @@ export default function GameStandings() {
         const loserIndex = Math.abs(winnerIndex - 1);
 
         return {
-          player: players[winnerIndex],
+          index: winnerIndex,
           score: scores[winnerIndex] - scores[loserIndex],
         };
       }
@@ -38,46 +38,94 @@ export default function GameStandings() {
     }
   };
 
-  const winner = roundWinner(1);
-
+  const scores = Array(players.length).fill(0);
   const roundsPlayed = players[0].scores.length;
+  const roundWinners = [];
+
+  for (let round = 0; round < roundsPlayed; round++) {
+    const winner = roundWinner(round + 1);
+    roundWinners.push(winner);
+
+    for (let i = 0; i < players.length; i++) {
+      if (winner.index === i) {
+        scores[i] = scores[i] + winner.score;
+      }
+    }
+  }
 
   return (
-    <div className='glass'>
-      <table className='table'>
-        <thead>
-          <tr>
-            <th>Round</th>
-            <th>Winner</th>
-            <th>Score</th>
-            <th>Total Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: roundsPlayed }).map((_, index) => {
-            const round = index + 1;
-            const { player, score } = roundWinner(round);
-
-            return (
-              <tr key={round}>
-                <td>{round}</td>
-                <td>{player ? player.name : '-'}</td>
-                <td>{player ? score : '-'}</td>
-                <td>
-                  {players
-                    .map((player) => {
-                      return player.scores[round - 1].reduce(
-                        (acc, score, index) => acc + score * scoring[index],
-                        0
-                      );
-                    })
-                    .reduce((acc, score) => acc + score, 0)}
-                </td>
+    <div className='glass w-full space-y-6 p-2'>
+      <div>
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {players.map((player, index) => (
+              <tr
+                key={player.name}
+                style={{ boxShadow: '-8px 0 ' + player.color }}
+              >
+                <td>{player.name}</td>
+                <td>{scores[index]}</td>
               </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>Winner</th>
+              <th>Score</th>
+              <th>-</th>
+            </tr>
+          </thead>
+          <tbody>
+            {roundWinners.map((_, roundIndex) => {
+              const round = roundIndex + 1;
+              const { index, score } = roundWinner(round);
+
+              return (
+                <tr key={round}>
+                  <td>{round}</td>
+                  <td>{index !== undefined ? players[index].name : '-'}</td>
+                  <td>{index !== undefined ? score : '-'}</td>
+                  <td>
+                    <Link
+                      className='btn btn-neutral btn-xs'
+                      href={`/round/${round}`}
+                    >
+                      edit
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className='mb-2 mt-6 flex justify-center'>
+        <Link
+          href={`/round/${roundsPlayed + 1}`}
+          onClick={() => {
+            setPlayers(
+              players.map((player) => ({
+                ...player,
+                scores: [...player.scores, [0, 0, 0, 0]],
+              }))
             );
-          })}
-        </tbody>
-      </table>
+          }}
+          className='btn btn-primary'
+        >
+          Next round!
+        </Link>
+      </div>
     </div>
   );
 }

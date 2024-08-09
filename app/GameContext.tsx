@@ -38,7 +38,6 @@ export function GameContextProvider({
     { name: 'Player 1', color: colors[0], scores: [[0, 0, 0, 0]] },
     { name: 'Player 2', color: colors[1], scores: [[0, 0, 0, 0]] },
   ]);
-  const [scores, setScores] = useState<number[][]>([[0, 0, 0, 0]]);
 
   return (
     <GameContext.Provider
